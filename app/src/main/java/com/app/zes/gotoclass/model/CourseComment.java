@@ -1,47 +1,55 @@
-package com.app.zes.gotoclass.fragment;
-
-import android.view.View;
-
-import com.app.zes.gotoclass.R;
-import com.zes.bundle.fragment.BaseFragment;
-
-import butterknife.OnClick;
+package com.app.zes.gotoclass.model;
 
 /**
- * Created by zes on 17-3-5 22:15
+ * Created by zes on 17-3-19 23:18
  */
-public class MineFragment extends BaseFragment {
-
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragement_mine;
-    }
+public class CourseComment {
 
     /**
-     * 初始化视图
+     * id : 1
+     * title : 明天不用上课
+     * content : 明天不用上课,老师请假了
+     * time : 2017-03-12 09:24
      */
-    @Override
-    protected void initView() {
 
+    private int id;
+    private String title;
+    private String content;
+    private String time;
 
+    public void setId(int id) {
+        this.id = id;
     }
 
-    @OnClick({R.id.ll_mine_leave_progress, R.id.ll_mine_score, R.id.ll_mine_setting, R.id.ll_mine_user_feedback})
-    protected void click(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.ll_mine_leave_progress:
-
-                break;
-        }
-
-
+    public void setTitle(String title) {
+        this.title = title;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getTime() {
+        return time;
+    }
 }
+
 /**
  * 　　　　　　　　┏┓　　　┏┓
  * 　　　　　　　┏┛┻━━━┛┻┓

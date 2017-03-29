@@ -39,11 +39,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:clickable="true"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/item_click"
+            android:id="@+id/ll_mine_leave_progress"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/item_click"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -57,16 +58,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:text="公告"
+                android:text="请假进度"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:clickable="true"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/item_click"
+            android:id="@+id/ll_mine_score"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/item_click"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -85,11 +87,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:clickable="true"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/item_click"
+            android:id="@+id/ll_mine_user_feedback"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/item_click"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -108,11 +111,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:clickable="true"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/item_click"
+            android:id="@+id/ll_mine_setting"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/item_click"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

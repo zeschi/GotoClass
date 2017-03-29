@@ -1,46 +1,25 @@
-package com.app.zes.gotoclass.fragment;
+package com.app.zes.gotoclass;
 
-import android.view.View;
+import android.app.Application;
 
-import com.app.zes.gotoclass.R;
-import com.zes.bundle.fragment.BaseFragment;
-
-import butterknife.OnClick;
+import com.zes.bundle.utils.Utils;
 
 /**
- * Created by zes on 17-3-5 22:15
+ * Created by zes on 17-3-18 21:17
  */
-public class MineFragment extends BaseFragment {
-
+public class App extends Application {
+    private static App mApp;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.fragement_mine;
+    public void onCreate() {
+        super.onCreate();
+        mApp = this;
+        Utils.init(this);
     }
 
-    /**
-     * 初始化视图
-     */
-    @Override
-    protected void initView() {
-
-
+    public static App getAppContext() {
+        return mApp;
     }
-
-    @OnClick({R.id.ll_mine_leave_progress, R.id.ll_mine_score, R.id.ll_mine_setting, R.id.ll_mine_user_feedback})
-    protected void click(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.ll_mine_leave_progress:
-
-                break;
-        }
-
-
-    }
-
-
 }
 /**
  * 　　　　　　　　┏┓　　　┏┓

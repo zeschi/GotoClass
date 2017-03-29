@@ -1,38 +1,35 @@
 package com.app.zes.gotoclass.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.app.zes.gotoclass.R;
-import com.app.zes.gotoclass.adapter.DetailFragmentPagerAdapter;
+import com.app.zes.gotoclass.adapter.ScoreAdapter;
 import com.zes.bundle.activity.BaseActivity;
+import com.zes.bundle.view.DividerGridItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
- * Created by zes on 17-3-18 09:34
+ * Created by zes on 17-3-18 11:02
  */
-
-public class ClassDetailActivity extends BaseActivity {
-    @Bind(R.id.tb_class_detail)
-    TabLayout tbClassDetail;
-    @Bind(R.id.vp_class_detail)
-    ViewPager vpClassDetail;
+public class ClassScoreActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.score_rv)
+    RecyclerView scoreRv;
+    private List<String> mDatas;
 
-    private DetailFragmentPagerAdapter pagerAdapter;
-
-    private int lessonId;
-    private int courseId;
-
+    private ScoreAdapter adapter;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_class_detail;
+        return R.layout.activity_class_score;
     }
 
     /**
@@ -43,7 +40,6 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void initData(Bundle savedInstanceState) {
 
-
     }
 
     /**
@@ -51,24 +47,18 @@ public class ClassDetailActivity extends BaseActivity {
      */
     @Override
     protected void initView() {
-
-        lessonId = getIntent().getIntExtra("lessonId", 0);
-        courseId = getIntent().getIntExtra("courseId", 0);
-        pagerAdapter = new DetailFragmentPagerAdapter(getSupportFragmentManager(), this, lessonId, courseId);
-        vpClassDetail.setAdapter(pagerAdapter);
-        tbClassDetail.setupWithViewPager(vpClassDetail);
-        tbClassDetail.setTabMode(TabLayout.MODE_FIXED);
+        mDatas = new ArrayList<>();
+        for (int i = 'A'; i < 'z'; i++) {
+            mDatas.add("" + (char) i);
+        }
+        adapter = new ScoreAdapter(this, mDatas, R.layout.item_score);
+        scoreRv.setLayoutManager(new GridLayoutManager(this, 3));
+        scoreRv.addItemDecoration(new DividerGridItemDecoration(this));
+        scoreRv.setAdapter(adapter);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
 /**
  * 　　　　　　　　┏┓　　　┏┓

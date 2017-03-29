@@ -1,46 +1,39 @@
-package com.app.zes.gotoclass.fragment;
+package com.app.zes.gotoclass.adapter;
 
-import android.view.View;
+import android.content.Context;
 
 import com.app.zes.gotoclass.R;
-import com.zes.bundle.fragment.BaseFragment;
+import com.app.zes.gotoclass.model.CourseOutline;
+import com.zes.bundle.adapter.BaseRecycleAdapter;
+import com.zes.bundle.bean.RecycleViewHolder;
 
-import butterknife.OnClick;
+import java.util.List;
 
 /**
- * Created by zes on 17-3-5 22:15
+ * Created by zes on 17-3-18 10:41
  */
-public class MineFragment extends BaseFragment {
-
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragement_mine;
+public class PreviewAdapter extends BaseRecycleAdapter<CourseOutline> {
+    public PreviewAdapter(Context context, List<CourseOutline> datas, int layoutId) {
+        super(context, datas, layoutId);
     }
 
     /**
-     * 初始化视图
+     * 所有子类的逻辑代码的实现
+     *
+     * @param holder
+     * @param data
+     * @param position
      */
     @Override
-    protected void initView() {
-
-
-    }
-
-    @OnClick({R.id.ll_mine_leave_progress, R.id.ll_mine_score, R.id.ll_mine_setting, R.id.ll_mine_user_feedback})
-    protected void click(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.ll_mine_leave_progress:
-
-                break;
+    protected void convertView(RecycleViewHolder holder, CourseOutline data, int position) {
+        holder.setText(R.id.tv_class_preview_lesson_name, data.getLessonName());
+        List<CourseOutline.OutlineEntity> outlinesEntities = data.getOutline();
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < outlinesEntities.size(); i++) {
+            stringBuffer.append(outlinesEntities.get(i).getSequence() + ": " + outlinesEntities.get(i).getContent() + "\n");
         }
-
-
+        holder.setText(R.id.tv_class_preview_outline, stringBuffer.toString());
     }
-
-
 }
 /**
  * 　　　　　　　　┏┓　　　┏┓

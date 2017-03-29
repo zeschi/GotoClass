@@ -1,38 +1,39 @@
 package com.app.zes.gotoclass.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.app.zes.gotoclass.R;
-import com.app.zes.gotoclass.adapter.DetailFragmentPagerAdapter;
+import com.app.zes.gotoclass.adapter.PreviewAdapter;
+import com.app.zes.gotoclass.api.ApiFactory;
 import com.zes.bundle.activity.BaseActivity;
+import com.zes.bundle.view.DividerItemDecoration;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by zes on 17-3-18 09:34
+ * Created by zes on 17-3-18 10:36
  */
-
-public class ClassDetailActivity extends BaseActivity {
-    @Bind(R.id.tb_class_detail)
-    TabLayout tbClassDetail;
-    @Bind(R.id.vp_class_detail)
-    ViewPager vpClassDetail;
+public class ClassPreviewActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.preview_rv)
+    RecyclerView previewRv;
 
-    private DetailFragmentPagerAdapter pagerAdapter;
+    private PreviewAdapter adapter;
 
-    private int lessonId;
-    private int courseId;
+    private List<String> mDatas;
 
+    private int couresId;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_class_detail;
+        return R.layout.activity_class_preview;
     }
 
     /**
@@ -43,7 +44,6 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void initData(Bundle savedInstanceState) {
 
-
     }
 
     /**
@@ -52,15 +52,24 @@ public class ClassDetailActivity extends BaseActivity {
     @Override
     protected void initView() {
 
-        lessonId = getIntent().getIntExtra("lessonId", 0);
-        courseId = getIntent().getIntExtra("courseId", 0);
-        pagerAdapter = new DetailFragmentPagerAdapter(getSupportFragmentManager(), this, lessonId, courseId);
-        vpClassDetail.setAdapter(pagerAdapter);
-        tbClassDetail.setupWithViewPager(vpClassDetail);
-        tbClassDetail.setTabMode(TabLayout.MODE_FIXED);
+        couresId = getIntent().getIntExtra("courseId", 0);
+
+//        mDatas = new ArrayList<>();
+//        for (int i = 'A'; i < 'z'; i++) {
+//            mDatas.add("" + (char) i);
+//        }
+        ApiFactory.findCourseOutline(couresId, 1, 10).subscribe(courseOutlines -> {
+            if (courseOutlines != null) {
+                adapter = new PreviewAdapter(this, courseOutlines, R.layout.item_prieview);
+                previewRv.setAdapter(adapter);
+            }
+        });
+
+        previewRv.setLayoutManager(new LinearLayoutManager(this));
+        previewRv.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-
     }
 
     @Override

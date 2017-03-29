@@ -1,46 +1,35 @@
-package com.app.zes.gotoclass.fragment;
+package com.app.zes.gotoclass.adapter;
 
-import android.view.View;
+import android.content.Context;
 
 import com.app.zes.gotoclass.R;
-import com.zes.bundle.fragment.BaseFragment;
+import com.app.zes.gotoclass.model.CourseComment;
+import com.zes.bundle.adapter.BaseRecycleAdapter;
+import com.zes.bundle.bean.RecycleViewHolder;
 
-import butterknife.OnClick;
+import java.util.List;
 
 /**
- * Created by zes on 17-3-5 22:15
+ * Created by zes on 17-3-18 11:06
  */
-public class MineFragment extends BaseFragment {
-
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.fragement_mine;
+public class PublishAdapter extends BaseRecycleAdapter<CourseComment> {
+    public PublishAdapter(Context context, List<CourseComment> datas, int layoutId) {
+        super(context, datas, layoutId);
     }
 
     /**
-     * 初始化视图
+     * 所有子类的逻辑代码的实现
+     *
+     * @param holder
+     * @param data
+     * @param position
      */
     @Override
-    protected void initView() {
-
-
+    protected void convertView(RecycleViewHolder holder, CourseComment data, int position) {
+        holder.setText(R.id.tv_class_publish_time, data.getTime());
+        holder.setText(R.id.tv_class_publish_title, data.getTitle());
+        holder.setText(R.id.tv_class_publish_content, data.getContent());
     }
-
-    @OnClick({R.id.ll_mine_leave_progress, R.id.ll_mine_score, R.id.ll_mine_setting, R.id.ll_mine_user_feedback})
-    protected void click(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.ll_mine_leave_progress:
-
-                break;
-        }
-
-
-    }
-
-
 }
 /**
  * 　　　　　　　　┏┓　　　┏┓

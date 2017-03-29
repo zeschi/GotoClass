@@ -11,7 +11,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/id_num"
+            android:id="@+id/tv_class_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -21,9 +21,10 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_class_teacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/id_num"
+            android:layout_below="@id/tv_class_name"
             android:layout_centerInParent="true"
             android:text="蒋明亮" />
     </RelativeLayout>
@@ -34,7 +35,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/id_num2"
+            android:id="@+id/tv_class_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -44,9 +45,10 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_class_lesson_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/id_num2"
+            android:layout_below="@id/tv_class_room"
             android:layout_centerInParent="true"
             android:text="第一课时" />
     </RelativeLayout>
