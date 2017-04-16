@@ -1,52 +1,39 @@
-package com.app.zes.gotoclass.model;
+package com.app.zes.gotoclass.adapter;
+
+import android.content.Context;
+
+import com.app.zes.gotoclass.R;
+import com.app.zes.gotoclass.model.CourseLeaving;
+import com.zes.bundle.adapter.BaseRecycleAdapter;
+import com.zes.bundle.bean.RecycleViewHolder;
+
+import java.util.List;
 
 /**
- * Created by zes on 17-3-19 23:19
+ * Created by zes on 17-3-29 09:45
  */
-public class CourseFeedback {
+public class LeaveProgressAdapter extends BaseRecycleAdapter<CourseLeaving.LeavesEntity> {
+
+    public LeaveProgressAdapter(Context context, List<CourseLeaving.LeavesEntity> datas, int layoutId) {
+        super(context, datas, layoutId);
+    }
 
     /**
-     * id : 10
-     * username : Lucas
-     * content : 滚蛋
-     * time : 2017-03-19 11:19
+     * 所有子类的逻辑代码的实现
+     *
+     * @param holder
+     * @param data
+     * @param position
      */
+    @Override
+    protected void convertView(RecycleViewHolder holder, CourseLeaving.LeavesEntity data, int position) {
 
-    private int id;
-    private String username;
-    private String content;
-    private String time;
+        holder.setText(R.id.tv_item_leave_progress_class_name, data.getLessonName());
+        holder.setText(R.id.tv_item_leave_progress_class_reason, data.getReason());
+        holder.setText(R.id.tv_item_leave_progress_time, data.getTime());
+//        holder.setText(R.id.tv_item_leave_progress_state, data.getLessonName());
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username == null ? "" : username;
-    }
-
-    public String getContent() {
-        return content == null ? "" : content;
-    }
-
-    public String getTime() {
-        return time == null ? "" : time;
     }
 }
 /**

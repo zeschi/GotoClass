@@ -35,10 +35,6 @@ public class DetailFragment extends BaseFragment {
     TextView tvDetailClassScore;
     @Bind(R.id.tv_detail_class_feedback)
     TextView tvDetailClassFeedback;
-    @Bind(R.id.tv_detail_class_attendancePercent)
-    TextView tvDetailClassAttendancePercent;
-    @Bind(R.id.tv_detail_class_interactPercent)
-    TextView tvDetailClassInteractPercent;
 
     private int lessonId;
     private int courseId;
@@ -79,23 +75,25 @@ public class DetailFragment extends BaseFragment {
                     if (!TextUtils.isEmpty(comment)) {
                         tvDetailClassPublish.setText(comment);
                     }
-                    CourseLesson.LessonDetailEntity.GpaEntity gpa = lessonDetail.getGpa();
-                    if (gpa != null) {
-                        String score = gpa.getTotalScore();
-                        if (!TextUtils.isEmpty(score)) {
-                            tvDetailClassScore.setText("目前得分:" + score + "分");
-                        }
-                        String attendancePercent = gpa.getAttendancePrecent();
-                        if (!TextUtils.isEmpty(attendancePercent)) {
-                            tvDetailClassAttendancePercent.setText("考勤签到率:" + attendancePercent + "%");
-                        }
-                        String interactPercent = gpa.getInteractPrecent();
-                        if (!TextUtils.isEmpty(interactPercent)) {
-                            tvDetailClassInteractPercent.setText("互动完成率:" + attendancePercent + "%");
-                        }
-                    }
+//                    CourseLesson.LessonDetailEntity.GpaEntity gpa = lessonDetail.getGpa();
+//                    if (gpa != null) {
+//                        String score = gpa.getTotalScore();
+//                        if (!TextUtils.isEmpty(score)) {
+//                            tvDetailClassScore.setText("目前得分:" + score + "分");
+//                        }
+//                        String attendancePercent = gpa.getAttendancePrecent();
+////                        if (!TextUtils.isEmpty(attendancePercent)) {
+////                            tvDetailClassAttendancePercent.setText("考勤签到率:" + attendancePercent + "%");
+////                        }
+////                        String interactPercent = gpa.getInteractPrecent();
+////                        if (!TextUtils.isEmpty(interactPercent)) {
+////                            tvDetailClassInteractPercent.setText("互动完成率:" + attendancePercent + "%");
+////                        }
+//                    }
                 }
             }
+        }, throwable -> {
+            throwable.toString();
         });
 
     }
@@ -115,10 +113,15 @@ public class DetailFragment extends BaseFragment {
                 startActivity(commentIntent);
                 break;
             case R.id.tv_detail_class_score:
-                redirectActivity(getActivity(), ClassScoreActivity.class);
+                Intent scoreIntent = new Intent(getActivity(), ClassScoreActivity.class);
+                scoreIntent.putExtra("courseId", courseId);
+                startActivity(scoreIntent);
+
                 break;
             case R.id.tv_detail_class_feedback:
-                redirectActivity(getActivity(), ClassFeedbackActivity.class);
+                Intent feedbacktIntent = new Intent(getActivity(), ClassFeedbackActivity.class);
+                feedbacktIntent.putExtra("courseId", courseId);
+                startActivity(feedbacktIntent);
                 break;
         }
     }

@@ -1,42 +1,55 @@
 package com.app.zes.gotoclass.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.app.zes.gotoclass.R;
-import com.app.zes.gotoclass.adapter.ScoreAdapter;
+import com.app.zes.gotoclass.adapter.LeaveProgressAdapter;
 import com.app.zes.gotoclass.api.ApiFactory;
-import com.app.zes.gotoclass.model.GPAReport;
 import com.zes.bundle.activity.BaseActivity;
-import com.zes.bundle.view.DividerGridItemDecoration;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.zes.bundle.view.DividerItemDecoration;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by zes on 17-3-18 11:02
+ * Created by zes on 17-3-30 22:41
  */
-public class ClassScoreActivity extends BaseActivity {
+public class AskLeavingActivity extends BaseActivity {
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.score_rv)
-    RecyclerView scoreRv;
+    @Bind(R.id.tv_ask_leaving_text)
+    TextView tvAskLeavingText;
+    @Bind(R.id.sp_ask_leaving_reason)
+    Spinner spAskLeavingReason;
+    @Bind(R.id.et_ask_leaving_tip)
+    EditText etAskLeavingTip;
+    @Bind(R.id.ll_ask_leaving)
+    RelativeLayout llAskLeaving;
+    @Bind(R.id.rv_ask_leaving)
+    RecyclerView rvAskLeaving;
+    @Bind(R.id.btn_ask_leaving)
+    Button btnAskLeaving;
     @Bind(R.id.iv_back)
     ImageView ivBack;
-    private List<String> mDatas;
 
-    private ScoreAdapter adapter;
+    private LeaveProgressAdapter leaveProgressAdapter;
+
     private int couresId;
+    private int lessonId;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_class_score;
+        return R.layout.activity_ask_leaving;
     }
 
     /**
@@ -54,37 +67,39 @@ public class ClassScoreActivity extends BaseActivity {
      */
     @Override
     protected void initView() {
-        mDatas = new ArrayList<>();
-//        for (int i = 'A'; i < 'z'; i++) {
-//            mDatas.add("" + (char) i);
-//        }
-//        ApiFactory.getGPAReport()
         couresId = getIntent().getIntExtra("courseId", 0);
-        ApiFactory.getGPAReport(couresId).subscribe(gpaReport -> {
-            if (gpaReport != null) {
-                List<GPAReport.DetailEntity> detail = gpaReport.getDetail();
-                if (detail != null) {
-                    mDatas.add("课时");
-                    mDatas.add("考勤");
-                    mDatas.add("互动");
-                    for (int i = 0; i < detail.size(); i++) {
-                        mDatas.add(detail.get(i).getLessonName());
-                        mDatas.add(detail.get(i).getAttendance());
-                        mDatas.add(detail.get(i).getInteract() + "");
-                    }
-                    adapter = new ScoreAdapter(this, mDatas, R.layout.item_score);
-                    scoreRv.setLayoutManager(new GridLayoutManager(this, 3));
-                    scoreRv.addItemDecoration(new DividerGridItemDecoration(this));
-                    scoreRv.setAdapter(adapter);
-                }
+        lessonId = getIntent().getIntExtra("lessonId", 0);
+        ApiFactory.findCourseLeaving(couresId, 1, 10).subscribe(courseLeaving -> {
+            if (courseLeaving != null && courseLeaving.getLeaves() != null) {
+                leaveProgressAdapter = new LeaveProgressAdapter(this, courseLeaving.getLeaves(), R.layout.item_leave_progress);
+                rvAskLeaving.setAdapter(leaveProgressAdapter);
             }
-        }, throwable -> {
-            throwable.toString();
+
         });
+        rvAskLeaving.setLayoutManager(new LinearLayoutManager(this));
+        rvAskLeaving.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
+        btnAskLeaving.setOnClickListener(view -> askForLeaving());
         ivBack.setOnClickListener(view -> finish());
 
+    }
+
+    private void askForLeaving() {
+        String reason = etAskLeavingTip.getText().toString();
+        ApiFactory.askForLeave(couresId, lessonId, reason).subscribe(simpleResult -> {
+            if (simpleResult != null) {
+                ApiFactory.findCourseLeaving(couresId, 1, 10).subscribe(courseLeaving -> {
+                    if (courseLeaving != null && courseLeaving.getLeaves() != null) {
+                        if (leaveProgressAdapter != null) {
+                            leaveProgressAdapter.setData(courseLeaving.getLeaves());
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.app.zes.gotoclass.model.CourseAttendance;
 import com.app.zes.gotoclass.model.CourseByCode;
 import com.app.zes.gotoclass.model.CourseComment;
 import com.app.zes.gotoclass.model.CourseFeedback;
+import com.app.zes.gotoclass.model.CourseGPAReport;
 import com.app.zes.gotoclass.model.CourseLeaving;
 import com.app.zes.gotoclass.model.CourseLesson;
 import com.app.zes.gotoclass.model.CourseOutline;
+import com.app.zes.gotoclass.model.GPAReport;
 import com.app.zes.gotoclass.model.Login;
 import com.app.zes.gotoclass.model.SimpleResult;
 import com.app.zes.gotoclass.model.User;
@@ -165,8 +167,8 @@ public class ApiFactory {
      * @param code
      * @return
      */
-    public static Observable<SimpleResult> attendance(String code) {
-        return Api.getInstance().service.attendance(Utils.getSpUtils().getString("token"), code).compose(RxSchedulers.io_main());
+    public static Observable<SimpleResult> attendance(String code, String longitude, String latitude) {
+        return Api.getInstance().service.attendance(Utils.getSpUtils().getString("token"), code, longitude, latitude).compose(RxSchedulers.io_main());
     }
 
     /**
@@ -179,6 +181,25 @@ public class ApiFactory {
      */
     public static Observable<SimpleResult> askForLeave(int courseId, int lessonId, String reason) {
         return Api.getInstance().service.askForLeave(Utils.getSpUtils().getString("token"), courseId, lessonId, reason).compose(RxSchedulers.io_main());
+    }
+
+    /**
+     * 查看平时分
+     *
+     * @param courseId
+     * @return
+     */
+    public static Observable<GPAReport> getGPAReport(int courseId) {
+        return Api.getInstance().service.getGPAReport(Utils.getSpUtils().getString("token"), courseId).compose(RxSchedulers.io_main());
+    }
+
+    /**
+     * 查看平时成绩总览
+     *
+     * @return
+     */
+    public static Observable<CourseGPAReport> getCourseGPAReport() {
+        return Api.getInstance().service.getCourseGPAReport(Utils.getSpUtils().getString("token")).compose(RxSchedulers.io_main());
     }
 
     private static RequestBody getBody(Object t) {

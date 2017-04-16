@@ -1,9 +1,11 @@
 package com.app.zes.gotoclass.model;
 
+import java.io.Serializable;
+
 /**
  * Created by zes on 17-3-19 17:12
  */
-public class Course {
+public class Course implements Serializable {
 
     /**
      * id : 2

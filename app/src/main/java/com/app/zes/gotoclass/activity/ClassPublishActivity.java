@@ -1,17 +1,18 @@
 package com.app.zes.gotoclass.activity;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import com.app.zes.gotoclass.R;
 import com.app.zes.gotoclass.adapter.PublishAdapter;
 import com.app.zes.gotoclass.api.ApiFactory;
+import com.app.zes.gotoclass.view.RefreshRecyclerView;
 import com.zes.bundle.activity.BaseActivity;
+import com.zes.bundle.utils.MKToast;
 import com.zes.bundle.view.DividerItemDecoration;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,12 +24,16 @@ public class ClassPublishActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.rv_publish)
-    RecyclerView rvPublish;
+    RefreshRecyclerView rvPublish;
+    @Bind(R.id.srl)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.iv_back)
+    ImageView ivBack;
 
     private PublishAdapter adapter;
 
-    private List<String> mDatas;
     private int couresId;
+    private int currentPage = 2;
 
     @Override
     protected int getContentViewId() {
@@ -50,12 +55,14 @@ public class ClassPublishActivity extends BaseActivity {
      */
     @Override
     protected void initView() {
-//        mDatas = new ArrayList<>();
-//        for (int i = 'A'; i < 'z'; i++) {
-//            mDatas.add("" + (char) i);
-//        }
-        couresId = getIntent().getIntExtra("courseId", 0);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_blue_light, android.R.color.holo_green_light);
 
+        couresId = getIntent().getIntExtra("courseId", 0);
+        rvPublish.setLayoutManager(new LinearLayoutManager(this));
+        rvPublish.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
+        rvPublish.setLoadMoreEnable(true);
+        rvPublish.setFooterResource(R.layout.item_footer);
         ApiFactory.findCourseComment(couresId, 1, 10).subscribe(courseComments -> {
             if (courseComments != null) {
                 adapter = new PublishAdapter(this, courseComments, R.layout.item_publish);
@@ -63,11 +70,11 @@ public class ClassPublishActivity extends BaseActivity {
             }
 
         });
-        rvPublish.setLayoutManager(new LinearLayoutManager(this));
-        rvPublish.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST));
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        initListener();
+        ivBack.setOnClickListener(view -> finish());
+
     }
 
     @Override
@@ -75,6 +82,31 @@ public class ClassPublishActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    private void initListener() {
+        rvPublish.setOnLoadMoreListener(() -> ApiFactory.findCourseComment(couresId, currentPage, 5).subscribe(courseComments -> {
+            currentPage++;
+            if (courseComments != null) {
+                if (courseComments.size() == 0) {
+                    MKToast.showToast(this, "暂无更多数据");
+                } else {
+                    adapter.addAll(courseComments);
+                }
+                rvPublish.notifyData();
+            }
+        }));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+            ApiFactory.findCourseComment(couresId, 1, 5).subscribe(courseComments -> {
+                if (courseComments != null) {
+                    adapter.clear();
+                    currentPage = 2;
+                    adapter.setData(courseComments);
+                    rvPublish.notifyData();
+                }
+            });
+        });
     }
 }
 /**

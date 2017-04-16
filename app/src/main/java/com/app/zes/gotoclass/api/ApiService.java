@@ -5,9 +5,11 @@ import com.app.zes.gotoclass.model.CourseAttendance;
 import com.app.zes.gotoclass.model.CourseByCode;
 import com.app.zes.gotoclass.model.CourseComment;
 import com.app.zes.gotoclass.model.CourseFeedback;
+import com.app.zes.gotoclass.model.CourseGPAReport;
 import com.app.zes.gotoclass.model.CourseLeaving;
 import com.app.zes.gotoclass.model.CourseLesson;
 import com.app.zes.gotoclass.model.CourseOutline;
+import com.app.zes.gotoclass.model.GPAReport;
 import com.app.zes.gotoclass.model.Login;
 import com.app.zes.gotoclass.model.Phone;
 import com.app.zes.gotoclass.model.SimpleResult;
@@ -175,7 +177,7 @@ public interface ApiService {
      * @return
      */
     @GET("attendance")
-    Observable<SimpleResult> attendance(@Header("Authorization") String token, @Query("code") String code);
+    Observable<SimpleResult> attendance(@Header("Authorization") String token, @Query("code") String code, @Query("longitude") String longitude, @Query("latitude") String latitude);
 
     /**
      * 请假
@@ -188,6 +190,26 @@ public interface ApiService {
      */
     @GET("askForLeave")
     Observable<SimpleResult> askForLeave(@Header("Authorization") String token, @Query("courseId") int courseId, @Query("lessonId") int lessonId, @Query("reason") String reason);
+
+    /**
+     * 查看平时分
+     *
+     * @param token
+     * @param courseId
+     * @return
+     */
+    @GET("student/getGPAReport")
+    Observable<GPAReport> getGPAReport(@Header("Authorization") String token, @Query("courseId") int courseId);
+
+    /**
+     * 查看平时成绩总览
+     *
+     * @param token
+     * @return
+     */
+    @GET("student/getCourseGPAReport")
+    Observable<CourseGPAReport> getCourseGPAReport(@Header("Authorization") String token);
+
 
 }
 /**

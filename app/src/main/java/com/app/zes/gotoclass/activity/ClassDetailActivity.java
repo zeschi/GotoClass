@@ -1,9 +1,12 @@
 package com.app.zes.gotoclass.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.app.zes.gotoclass.R;
 import com.app.zes.gotoclass.adapter.DetailFragmentPagerAdapter;
@@ -23,6 +26,10 @@ public class ClassDetailActivity extends BaseActivity {
     ViewPager vpClassDetail;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.tv_detail_class_ask_for_leaving)
+    TextView tvDetailClassAskForLeaving;
+    @Bind(R.id.iv_back)
+    ImageView ivBack;
 
     private DetailFragmentPagerAdapter pagerAdapter;
 
@@ -61,6 +68,13 @@ public class ClassDetailActivity extends BaseActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
+        Intent intent = new Intent(this, AskLeavingActivity.class);
+        intent.putExtra("courseId", courseId);
+        intent.putExtra("lessonId", lessonId);
+        tvDetailClassAskForLeaving.setOnClickListener(view -> {
+            startActivity(intent);
+        });
+        ivBack.setOnClickListener(view -> finish());
     }
 
     @Override

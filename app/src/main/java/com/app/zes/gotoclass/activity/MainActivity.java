@@ -8,13 +8,17 @@ import android.view.Menu;
 import android.widget.FrameLayout;
 
 import com.app.zes.gotoclass.R;
+import com.app.zes.gotoclass.api.ApiFactory;
 import com.app.zes.gotoclass.fragment.ClassFragment;
 import com.app.zes.gotoclass.fragment.MineFragment;
 import com.app.zes.gotoclass.fragment.SignFragment;
+import com.app.zes.gotoclass.utils.RxBus;
+import com.app.zes.gotoclass.view.AddCourseDialog;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.zes.bundle.activity.BaseActivity;
 import com.zes.bundle.fragment.BaseFragment;
+import com.zes.bundle.utils.MKToast;
 
 import java.util.ArrayList;
 
@@ -58,7 +62,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC
                 );
         bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_class, "上课").setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.drawable.ic_phone, "签到").setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_sign, "签到").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.drawable.ic_user, "我的").setActiveColorResource(R.color.colorPrimary))
                 .setFirstSelectedPosition(0)
                 .initialise();
@@ -74,7 +78,49 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        menu.getItem(0).setOnMenuItemClickListener(menuItem -> {
+            addCourse();
+            return false;
+        });
+
         return true;
+    }
+
+    /**
+     * 添加课程
+     */
+    private void addCourse() {
+        AddCourseDialog addCourseDialog = new AddCourseDialog(MainActivity.this);
+//        addCourseDialog.setTitle("提示");
+//        addCourseDialog.setMessage("确定退出应用?");
+        addCourseDialog.setYesOnclickListener("确定", () -> {
+//            Toast.makeText(MainActivity.this, "点击了--确定--按钮", Toast.LENGTH_LONG).show();
+            String courseCode = addCourseDialog.getMessage();
+            ApiFactory.findCourseByCode(courseCode).subscribe(courseByCode -> {
+//                RxBus.getInstance().post(1);
+                if (courseByCode != null && courseByCode.getCourse() != null) {
+                    int courseId = courseByCode.getCourse().getId();
+                    ApiFactory.addCourse(courseId).subscribe(simpleResult -> {
+                        if (simpleResult != null && simpleResult.getResult().equals("success")) {
+                            MKToast.showToast(MainActivity.this, "添加成功");
+                            addCourseDialog.dismiss();
+                            RxBus.getInstance().post(1);
+                        } else {
+                            MKToast.showToast(MainActivity.this, "添加失败");
+                            addCourseDialog.dismiss();
+                        }
+                    });
+                } else {
+                    MKToast.showToast(MainActivity.this, "添加失败");
+                    addCourseDialog.dismiss();
+                }
+            });
+        });
+        addCourseDialog.setNoOnclickListener("取消", () -> {
+            addCourseDialog.dismiss();
+        });
+        addCourseDialog.show();
+
     }
 
     /**
@@ -109,6 +155,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 BaseFragment fragment = fragments.get(position);
 //                if (fragment.isAdded()) {
                 ft.replace(R.id.layFrame, fragment);
+                ft.show(fragment);
 //                } else {
 //                    ft.add(R.id.layFrame, fragment);
 //                }
@@ -129,7 +176,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 BaseFragment fragment = fragments.get(position);
-                ft.remove(fragment);
+                ft.hide(fragment);
                 ft.commitAllowingStateLoss();
             }
         }

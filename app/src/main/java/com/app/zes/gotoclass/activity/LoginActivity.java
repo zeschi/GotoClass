@@ -1,15 +1,25 @@
 package com.app.zes.gotoclass.activity;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.app.zes.gotoclass.R;
 import com.app.zes.gotoclass.api.ApiFactory;
 import com.app.zes.gotoclass.model.User;
 import com.zes.bundle.activity.BaseActivity;
+import com.zes.bundle.utils.MKToast;
 import com.zes.bundle.utils.Utils;
 import com.zes.bundle.view.RoundImageViewByXfermode;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,6 +37,10 @@ public class LoginActivity extends BaseActivity {
     Button loginBtnLogin;
     @Bind(R.id.login_btn_register)
     Button loginBtnRegister;
+    @Bind(R.id.et_login_user_name)
+    EditText etLoginUserName;
+    @Bind(R.id.et_login_user_password)
+    EditText etLoginUserPassword;
 
     @Override
     protected int getContentViewId() {
@@ -73,119 +87,60 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void login() {
-        User user = new User();
-        user.setUsername("13527805610");
-        user.setPassword("lucas");
-        ApiFactory.login(user).subscribe(login -> {
-            if (login != null) {
-                Utils.getSpUtils().put("token", login.getToken());
-                redictToActivity(LoginActivity.this, MainActivity.class);
+//        Log.e("sHA1", sHA1(this));
 
+        User user = new User();
+        String userName = etLoginUserName.getText().toString();
+        String userPassword = etLoginUserPassword.getText().toString();
+        if (TextUtils.isEmpty(userName)) {
+            MKToast.showToast(this, "用户名不能为空");
+            return;
+        } else if (TextUtils.isEmpty(userPassword)) {
+            MKToast.showToast(this, "密码不能为空");
+            return;
+        }
+        user.setUsername(userName);
+        user.setPassword(userPassword);
+
+//        user.setUsername("13527805610");
+//        user.setPassword("lucas");
+        ApiFactory.login(user).subscribe(login -> {
+            if (login != null && login.getResult().equals("success")) {
+                redictToActivity(LoginActivity.this, MainActivity.class);
+                Utils.getSpUtils().put("token", login.getToken());
+            } else {
+                MKToast.showToast(LoginActivity.this, login.getResult());
             }
         }, throwable -> {
 
         });
-//        ApiFactory.findUserCourses(1, 6).subscribe(courses -> {
-//            if (courses != null) {
-//
-//            }
-//
-//        });
-//        ApiFactory.findCourseByCode("ZGq49").subscribe(courseByCode -> {
-//            if (courseByCode != null) {
-//
-//            }
-//        });
 
-//        ApiFactory.addCourse(3).subscribe(addCourse -> {
-//            if (addCourse != null) {
-//
-//            }
-//        });
+    }
 
-//        ApiFactory.findCourseLesson(1).subscribe(courseLesson -> {
-//            if (courseLesson != null) {
-//
-//            }
-//
-//        });
-
-//        ApiFactory.findCourseOutline(2, 1, 5).subscribe(courseOutline -> {
-//            if (courseOutline != null) {
-//
-//            }
-//        });
-//        ApiFactory.findCourseFeedback(1, 1, 4).subscribe(courseFeedbacks -> {
-//            if (courseFeedbacks != null) {
-//
-//            }
-//        });
-
-//        ApiFactory.findCourseAttendance(1, 1, 5).subscribe(courseLesson -> {
-//
-//            if (courseLesson != null) {
-//
-//            }
-//        });
-
-//        ApiFactory.findCourseLeaving(1,1,5).subscribe(courseLeaving -> {
-//            if (courseLeaving != null) {
-//
-//            }
-//        });
-
-//        ApiFactory.findCourseComment(1, 1, 6).subscribe(courseComments -> {
-//            if (courseComments != null) {
-//
-//            }
-//
-//        });
-
-//        ApiFactory.fillInFeedback(1, "test", "N").subscribe(simpleResult -> {
-//            if (simpleResult != null) {
-//
-//            }
-//        });
-
-//        ApiFactory.attendance("00101123").subscribe(simpleResult -> {
-//            if (simpleResult != null) {
-//
-//            }
-//        });
-
-//        ApiFactory.askForLeave(1, 2, "test").subscribe(simpleResult -> {
-//
-//            if (simpleResult != null) {
-//
-//            }
-//
-//        });
-
-
-//        Gson gson = new GsonBuilder().setLenient()
-//                .create();
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(C.BASE_URL)
-//                        //增加返回值为Gson的支持(以实体类返回)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                        //增加返回值为Oservable<T>的支持
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                .build();
-//        ApiService apiService = retrofit.create(ApiService.class);
-//        apiService.findUserCourses(Utils.getSpUtils().getString("token"), 1, 6).enqueue(new Callback<List<Course>>() {
-//            @Override
-//            public void onResponse(Call<List<Course>> call, Response<List<Course>> response) {
-//                if (response.body() != null) {
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Course>> call, Throwable t) {
-//                t.toString();
-//            }
-//        });
+    public static String sHA1(Context context) {
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(), PackageManager.GET_SIGNATURES);
+            byte[] cert = info.signatures[0].toByteArray();
+            MessageDigest md = MessageDigest.getInstance("SHA1");
+            byte[] publicKey = md.digest(cert);
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < publicKey.length; i++) {
+                String appendString = Integer.toHexString(0xFF & publicKey[i])
+                        .toUpperCase(Locale.US);
+                if (appendString.length() == 1)
+                    hexString.append("0");
+                hexString.append(appendString);
+                hexString.append(":");
+            }
+            String result = hexString.toString();
+            return result.substring(0, result.length() - 1);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 /**

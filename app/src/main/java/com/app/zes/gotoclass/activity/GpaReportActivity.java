@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.app.zes.gotoclass.R;
 import com.app.zes.gotoclass.adapter.ScoreAdapter;
 import com.app.zes.gotoclass.api.ApiFactory;
-import com.app.zes.gotoclass.model.GPAReport;
+import com.app.zes.gotoclass.model.CourseGPAReport;
 import com.zes.bundle.activity.BaseActivity;
 import com.zes.bundle.view.DividerGridItemDecoration;
 
@@ -20,23 +20,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by zes on 17-3-18 11:02
+ * Created by zes on 17-4-15 11:10
  */
-public class ClassScoreActivity extends BaseActivity {
+public class GpaReportActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.score_rv)
-    RecyclerView scoreRv;
+    @Bind(R.id.gpa_report_rv)
+    RecyclerView gpaReportRv;
     @Bind(R.id.iv_back)
     ImageView ivBack;
     private List<String> mDatas;
-
     private ScoreAdapter adapter;
-    private int couresId;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_class_score;
+        return R.layout.activity_gpa_report;
     }
 
     /**
@@ -55,27 +53,26 @@ public class ClassScoreActivity extends BaseActivity {
     @Override
     protected void initView() {
         mDatas = new ArrayList<>();
-//        for (int i = 'A'; i < 'z'; i++) {
-//            mDatas.add("" + (char) i);
-//        }
-//        ApiFactory.getGPAReport()
-        couresId = getIntent().getIntExtra("courseId", 0);
-        ApiFactory.getGPAReport(couresId).subscribe(gpaReport -> {
-            if (gpaReport != null) {
-                List<GPAReport.DetailEntity> detail = gpaReport.getDetail();
-                if (detail != null) {
-                    mDatas.add("课时");
-                    mDatas.add("考勤");
-                    mDatas.add("互动");
-                    for (int i = 0; i < detail.size(); i++) {
-                        mDatas.add(detail.get(i).getLessonName());
-                        mDatas.add(detail.get(i).getAttendance());
-                        mDatas.add(detail.get(i).getInteract() + "");
+
+        ApiFactory.getCourseGPAReport().subscribe(courseGPAReport -> {
+            if (courseGPAReport != null) {
+                List<CourseGPAReport.ScoreEntity> scoreEntities = courseGPAReport.getScore();
+                if (scoreEntities != null) {
+                    mDatas.add("课程名称");
+                    mDatas.add("考勤得分");
+                    mDatas.add("互动得分");
+                    mDatas.add("总分");
+                    for (int i = 0; i < scoreEntities.size(); i++) {
+                        mDatas.add(scoreEntities.get(i).getCourseName());
+                        mDatas.add(scoreEntities.get(i).getAttendanceScore() + "");
+                        mDatas.add(scoreEntities.get(i).getInteractScore() + "");
+                        mDatas.add(scoreEntities.get(i).getTotalScore() + "");
                     }
                     adapter = new ScoreAdapter(this, mDatas, R.layout.item_score);
-                    scoreRv.setLayoutManager(new GridLayoutManager(this, 3));
-                    scoreRv.addItemDecoration(new DividerGridItemDecoration(this));
-                    scoreRv.setAdapter(adapter);
+                    gpaReportRv.setLayoutManager(new GridLayoutManager(this, 4));
+                    gpaReportRv.addItemDecoration(new DividerGridItemDecoration(this));
+                    gpaReportRv.setAdapter(adapter);
+
                 }
             }
         }, throwable -> {

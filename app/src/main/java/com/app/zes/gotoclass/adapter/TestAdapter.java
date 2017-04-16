@@ -1,52 +1,31 @@
-package com.app.zes.gotoclass.model;
+package com.app.zes.gotoclass.adapter;
+
+import android.content.Context;
+
+import com.app.zes.gotoclass.R;
+import com.zes.bundle.adapter.BaseRecycleAdapter;
+import com.zes.bundle.bean.RecycleViewHolder;
+
+import java.util.List;
 
 /**
- * Created by zes on 17-3-19 23:19
+ * Created by zes on 17-4-8 16:38
  */
-public class CourseFeedback {
+public class TestAdapter extends BaseRecycleAdapter<String> {
+    public TestAdapter(Context context, List<String> datas, int layoutId) {
+        super(context, datas, layoutId);
+    }
 
     /**
-     * id : 10
-     * username : Lucas
-     * content : 滚蛋
-     * time : 2017-03-19 11:19
+     * 所有子类的逻辑代码的实现
+     *
+     * @param holder
+     * @param data
+     * @param position
      */
-
-    private int id;
-    private String username;
-    private String content;
-    private String time;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username == null ? "" : username;
-    }
-
-    public String getContent() {
-        return content == null ? "" : content;
-    }
-
-    public String getTime() {
-        return time == null ? "" : time;
+    @Override
+    protected void convertView(RecycleViewHolder holder, String data, int position) {
+        holder.setText(R.id.tv_score_class, data);
     }
 }
 /**
