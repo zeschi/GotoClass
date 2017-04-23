@@ -17,7 +17,6 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
             android:text="Web前端技术"
-            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
@@ -28,6 +27,13 @@
             android:layout_centerInParent="true"
             android:text="蒋明亮" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary" />
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -40,8 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:text="教学楼303"
-            android:textSize="18sp"
+            android:text="教学楼"
             android:textStyle="bold" />
 
         <TextView
@@ -51,5 +56,28 @@
             android:layout_below="@id/tv_class_room"
             android:layout_centerInParent="true"
             android:text="第一课时" />
+
+        <ImageView
+            android:id="@+id/iv_class_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@id/tv_class_room"
+            android:src="@drawable/ic_location" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_class_location"
+            android:layout_marginTop="12dp"
+            android:layout_toLeftOf="@id/tv_class_room"
+            android:src="@drawable/ic_lesson" />
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_enter" />
 </LinearLayout>

@@ -10,9 +10,10 @@
         android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:src="@drawable/luffy" />
+        android:src="@drawable/linting" />
 
     <EditText
+        android:id="@+id/et_login_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -20,9 +21,10 @@
         android:layout_marginTop="20dp"
         android:drawableLeft="@drawable/ic_user"
         android:drawablePadding="10dp"
-        android:hint="用户名/手机号" />
+        android:hint="手机号码" />
 
     <EditText
+        android:id="@+id/et_login_user_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

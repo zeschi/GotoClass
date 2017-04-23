@@ -2,26 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:orientation="vertical">
+    android:layout_margin="10dp"
+    android:gravity="center"
+    android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2017-12-23 20:20" />
+    <com.zes.bundle.view.RoundImageViewByXfermode
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/luffy" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="第八课时"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_gravity="center_vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="老师发什么我就显示什么，我估计老师会发" />
+        <TextView
+            android:id="@+id/tv_item_feedback_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第八课时" />
+
+        <TextView
+            android:id="@+id/tv_item_feedback_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="2017-12-23 20:20" />
+
+        <TextView
+            android:id="@+id/tv_item_feedback_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_item_feedback_user_name"
+            android:layout_marginTop="10dp"
+            android:text="老师发什么我就显示什么，我估计老师会发" />
+    </RelativeLayout>
+
 
 </LinearLayout>

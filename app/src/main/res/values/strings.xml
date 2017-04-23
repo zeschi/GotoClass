@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">上课啦</string>
+    <string-array name="spingarr">
+        <item>病假</item>
+        <item>事假</item>
+    </string-array>
 </resources>

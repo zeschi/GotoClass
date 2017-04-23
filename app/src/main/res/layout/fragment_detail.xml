@@ -33,8 +33,9 @@
             android:id="@+id/tv_detail_class_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="#efefef" />
+            android:layout_marginTop="10dp"
+            android:background="#efefef"
+            android:paddingLeft="16dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -60,8 +61,10 @@
             android:id="@+id/tv_detail_class_publish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:background="#efefef"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="10dp"
             android:text="" />
 
         <RelativeLayout
@@ -84,38 +87,17 @@
                 android:text="平时成绩" />
         </RelativeLayout>
 
-        <RelativeLayout
+
+        <TextView
+            android:id="@+id/tv_detail_class_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#efefef">
-
-            <TextView
-                android:id="@+id/tv_detail_class_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="16dp"
-                android:text="目前得分:90" />
-
-            <TextView
-                android:id="@+id/tv_detail_class_attendancePercent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_margin="20dp"
-                android:text="考勤签到率:90%" />
-
-            <TextView
-                android:id="@+id/tv_detail_class_interactPercent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/tv_detail_class_attendancePercent"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"
-                android:text="互动完成率:90%" />
-
-        </RelativeLayout>
+            android:layout_centerVertical="true"
+            android:background="#efefef"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="10dp"
+            android:text="查看平时成绩" />
 
 
         <RelativeLayout
@@ -142,9 +124,9 @@
             android:id="@+id/tv_detail_class_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:background="#efefef"
             android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
             android:paddingTop="10dp"
             android:text="参与加入课堂反馈" />
     </LinearLayout>
