@@ -1,10 +1,10 @@
 package com.app.zes.gotoclass.activity;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,12 +17,12 @@ import com.zes.bundle.utils.MKToast;
 import com.zes.bundle.utils.Utils;
 import com.zes.bundle.view.RoundImageViewByXfermode;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -30,15 +30,19 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends BaseActivity {
 
-
+    @Nullable
     @Bind(R.id.login_iv_portrait)
     RoundImageViewByXfermode loginIvPortrait;
+    @Nullable
     @Bind(R.id.login_btn_login)
     Button loginBtnLogin;
+    @Nullable
     @Bind(R.id.login_btn_register)
     Button loginBtnRegister;
+    @Nullable
     @Bind(R.id.et_login_user_name)
     EditText etLoginUserName;
+    @Nullable
     @Bind(R.id.et_login_user_password)
     EditText etLoginUserPassword;
 
@@ -63,24 +67,37 @@ public class LoginActivity extends BaseActivity {
      */
     @Override
     protected void initView() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tokenTime = Utils.getSpUtils().getString("tokenTime");
+        if (TextUtils.isEmpty(tokenTime)) {
+            return;
+        } else {
+            try {
+                Date tokenDate = df.parse(tokenTime);
+                Date curDate = new Date(System.currentTimeMillis());
+                long days = (tokenDate.getTime() - curDate.getTime()) / (1000 * 60 * 60 * 24);
+                Log.e("day", days + "");
+                if (!TextUtils.isEmpty(Utils.getSpUtils().getString("token")) && days < 7) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
 
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 
     @OnClick({R.id.login_btn_login, R.id.login_btn_register})
     protected void clcik(View view) {
         switch (view.getId()) {
             case R.id.login_btn_login:
-                login();
                 break;
             case R.id.login_btn_register:
-                redictToActivity(LoginActivity.this, RegisterActivity.class);
+
                 break;
         }
 
@@ -88,26 +105,33 @@ public class LoginActivity extends BaseActivity {
 
     private void login() {
 //        Log.e("sHA1", sHA1(this));
-
+//
         User user = new User();
-        String userName = etLoginUserName.getText().toString();
-        String userPassword = etLoginUserPassword.getText().toString();
-        if (TextUtils.isEmpty(userName)) {
-            MKToast.showToast(this, "用户名不能为空");
-            return;
-        } else if (TextUtils.isEmpty(userPassword)) {
-            MKToast.showToast(this, "密码不能为空");
-            return;
-        }
-        user.setUsername(userName);
-        user.setPassword(userPassword);
+//        String userName = etLoginUserName.getText().toString();
+//        String userPassword = etLoginUserPassword.getText().toString();
+//        if (TextUtils.isEmpty(userName)) {
+//            MKToast.showToast(this, "用户名不能为空");
+//            return;
+//        } else if (TextUtils.isEmpty(userPassword)) {
+//            MKToast.showToast(this, "密码不能为空");
+//            return;
+//        }
+//        user.setUsername(userName);
+//        user.setPassword(userPassword);
 
-//        user.setUsername("13527805610");
-//        user.setPassword("lucas");
+        user.setUsername("13527805610");
+        user.setPassword("lucas");
         ApiFactory.login(user).subscribe(login -> {
             if (login != null && login.getResult().equals("success")) {
-                redictToActivity(LoginActivity.this, MainActivity.class);
                 Utils.getSpUtils().put("token", login.getToken());
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date curDate = new Date(System.currentTimeMillis());
+                String tokenTime = df.format(curDate);
+                Utils.getSpUtils().put("tokenTime", tokenTime);
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             } else {
                 MKToast.showToast(LoginActivity.this, login.getResult());
             }
@@ -117,31 +141,6 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    public static String sHA1(Context context) {
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), PackageManager.GET_SIGNATURES);
-            byte[] cert = info.signatures[0].toByteArray();
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            byte[] publicKey = md.digest(cert);
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < publicKey.length; i++) {
-                String appendString = Integer.toHexString(0xFF & publicKey[i])
-                        .toUpperCase(Locale.US);
-                if (appendString.length() == 1)
-                    hexString.append("0");
-                hexString.append(appendString);
-                hexString.append(":");
-            }
-            String result = hexString.toString();
-            return result.substring(0, result.length() - 1);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
 /**
  * 　　　　　　　　┏┓　　　┏┓

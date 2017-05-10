@@ -36,7 +36,7 @@ public class DetailFragmentPagerAdapter extends FragmentPagerAdapter {
     private void initList() {
         list = new ArrayList<>();
         list.add(DetailFragment.newInstance(mLessonId, mCourseId));
-        list.add(new InteractFragment());
+        list.add(InteractFragment.newInstance(mLessonId, mCourseId));
     }
 
     @Override

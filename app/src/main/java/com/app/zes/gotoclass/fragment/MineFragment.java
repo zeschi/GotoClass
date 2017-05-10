@@ -1,5 +1,6 @@
 package com.app.zes.gotoclass.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.widget.TextView;
 
 import com.app.zes.gotoclass.R;
 import com.app.zes.gotoclass.activity.GpaReportActivity;
+import com.app.zes.gotoclass.activity.MainActivity;
 import com.zes.bundle.fragment.BaseFragment;
+import com.zes.bundle.utils.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,12 +47,18 @@ public class MineFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.ll_mine_score, R.id.ll_mine_setting, R.id.ll_mine_user_feedback})
+    @OnClick({R.id.ll_mine_score, R.id.ll_mine_setting, R.id.ll_mine_user_feedback, R.id.ll_mine_logout})
     protected void click(View view) {
 
         switch (view.getId()) {
             case R.id.ll_mine_score:
                 redirectActivity(getActivity(), GpaReportActivity.class);
+                break;
+            case R.id.ll_mine_logout:
+                Utils.getSpUtils().clear();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
 

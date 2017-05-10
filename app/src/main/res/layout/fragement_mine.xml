@@ -110,6 +110,30 @@
                 android:text="设置"
                 android:textSize="18sp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_mine_logout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/item_click"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="退出登录"
+                android:textSize="18sp" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
