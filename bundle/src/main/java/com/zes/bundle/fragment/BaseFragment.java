@@ -1,5 +1,7 @@
 package com.zes.bundle.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(getContentViewId(), container, false);
-        ButterKnife.bind(this,rootView);
+        ButterKnife.bind(this, rootView);
         initView();
         return rootView;
     }
@@ -33,5 +35,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected View getRootView() {
         return rootView;
+    }
+
+    protected void redirectActivity(Activity activity, Class c) {
+        Intent intent = new Intent(activity, c);
+        startActivity(intent);
     }
 }

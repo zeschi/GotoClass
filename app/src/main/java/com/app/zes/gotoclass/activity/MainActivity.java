@@ -126,20 +126,20 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 //        Log.e("sHA1", sHA1(this));
 //
         User user = new User();
-//        String userName = etLoginUserName.getText().toString();
-//        String userPassword = etLoginUserPassword.getText().toString();
-//        if (TextUtils.isEmpty(userName)) {
-//            MKToast.showToast(this, "用户名不能为空");
-//            return;
-//        } else if (TextUtils.isEmpty(userPassword)) {
-//            MKToast.showToast(this, "密码不能为空");
-//            return;
-//        }
-//        user.setUsername(userName);
-//        user.setPassword(userPassword);
+        String userName = etLoginUserName.getText().toString();
+        String userPassword = etLoginUserPassword.getText().toString();
+        if (TextUtils.isEmpty(userName)) {
+            MKToast.showToast(this, "用户名不能为空");
+            return;
+        } else if (TextUtils.isEmpty(userPassword)) {
+            MKToast.showToast(this, "密码不能为空");
+            return;
+        }
+        user.setUsername(userName);
+        user.setPassword(userPassword);
 
-        user.setUsername("13527805610");
-        user.setPassword("lucas");
+//        user.setUsername("13527805610");
+//        user.setPassword("lucas");
         ApiFactory.login(user).subscribe(login -> {
             if (login != null && login.getResult().equals("success")) {
                 Utils.getSpUtils().put("token", login.getToken());

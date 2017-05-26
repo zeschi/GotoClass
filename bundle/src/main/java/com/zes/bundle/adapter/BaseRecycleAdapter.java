@@ -35,7 +35,7 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<Recycle
 
     @Override
     public RecycleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecycleViewHolder holder = new RecycleViewHolder(LayoutInflater.from(mContext).inflate(mLayoutId, parent, false),mContext);
+        RecycleViewHolder holder = new RecycleViewHolder(LayoutInflater.from(mContext).inflate(mLayoutId, parent, false), mContext);
         return holder;
     }
 
@@ -48,7 +48,7 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<Recycle
                 @Override
                 public void onClick(View v) {
                     int pos = holder.getLayoutPosition();
-                    mOnItemClickListener.onItemClick(holder,v, pos);
+                    mOnItemClickListener.onItemClick(holder, v, pos);
                 }
             });
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -138,6 +138,10 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<Recycle
         notifyDataSetChanged();
     }
 
+    public List<T> getData() {
+        return mDatas;
+    }
+
     /**
      * 所有子类的逻辑代码的实现
      *
@@ -159,6 +163,7 @@ public abstract class BaseRecycleAdapter<T> extends RecyclerView.Adapter<Recycle
     public void setOnItemClickLitener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
     }
+
     /**
      * @param view
      * @param text
